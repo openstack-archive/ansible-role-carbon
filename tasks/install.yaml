@@ -24,12 +24,12 @@
     state: installed
   when: carbon_install_method == 'git' or carbon_install_method == 'pip'
 
-- name: Define carbon_pip_executable if needed.
-  set_fact:
-    carbon_pip_executable: pip3
-  when:
-    - carbon_install_method == 'git' or carbon_install_method == 'pip'
-    - carbon_pip_virtualenv_python is not defined
-    - carbon_pip_executable is not defined
+#- name: Define carbon_pip_executable if needed.
+#  set_fact:
+#    carbon_pip_executable: pip3
+#  when:
+#    - carbon_install_method == 'git' or carbon_install_method == 'pip'
+#    - carbon_pip_virtualenv_python is not defined
+#    - carbon_pip_executable is not defined
 
 - include: "install/{{ carbon_install_method }}.yaml"

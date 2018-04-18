@@ -17,6 +17,7 @@
     rolename: ansible-role-carbon
 
   roles:
+    - ansible-role-whisper
     - "{{ rolename }}"
 
   post_tasks:
@@ -32,3 +33,36 @@
           - carbon_git_dest_stat.stat.exists
           - carbon_git_dest_stat.stat.isdir
       when: carbon_install_method == 'git'
+
+    - name: Register /etc/systemd/system/carbon-cache.service
+      stat:
+        path: /etc/systemd/system/carbon-cache.service
+      register: _carbon_cache_service_systemd_stat
+
+    - name: Assert _carbon_cache_service_systemd_stat tests.
+      assert:
+        that:
+          - _carbon_cache_service_systemd_stat.stat.exists
+          - _carbon_cache_service_systemd_stat.stat.isreg
+          - _carbon_cache_service_systemd_stat.stat.pw_name == 'root'
+          - _carbon_cache_service_systemd_stat.stat.gr_name == 'root'
+          - _carbon_cache_service_systemd_stat.stat.mode == '0644'
+
+    - name: Register /etc/systemd/system/carbon.cache.service.d/override.conf
+      stat:
+        path: /etc/systemd/system/carbon-cache.service.d/override.conf
+      register: _carbon_cache_service_config_stat
+
+    - name: Assert _carbon_cache_service_config_stat tests.
+      assert:
+        that:
+          - _carbon_cache_service_config_stat.stat.exists
+          - _carbon_cache_service_config_stat.stat.isreg
+          - _carbon_cache_service_config_stat.stat.pw_name == 'root'
+          - _carbon_cache_service_config_stat.stat.gr_name == 'root'
+          - _carbon_cache_service_config_stat.stat.mode == '0644'
+
+    - name: Ensure carbon-cache is running.
+      become: yes
+      shell: /usr/sbin/service carbon-cache status
+      tags: skip_ansible_lint
