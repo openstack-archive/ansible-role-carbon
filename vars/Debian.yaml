@@ -13,3 +13,11 @@
 # under the License.
 ---
 __carbon_build_depends: []
+
+__carbon_file_carbon_cache_service_dest: /etc/systemd/system/carbon-cache.service
+__carbon_file_carbon_cache_service_mode: 0644
+__carbon_file_carbon_cache_service_src: etc/systemd/system/carbon-cache.service
+
+__carbon_file_carbon_cache_service_config_dest: /etc/systemd/system/carbon-cache.service.d/override.conf
+__carbon_file_carbon_cache_service_config_mode: 0644
+__carbon_file_carbon_cache_service_config_src: etc/systemd/system/carbon-cache.service.d/override.conf
