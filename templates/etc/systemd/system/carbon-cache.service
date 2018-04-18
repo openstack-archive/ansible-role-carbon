@@ -1,0 +1,12 @@
+[Unit]
+Description=Graphite Carbon Cache
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart={{ carbon_pip_virtualenv | default('/opt/graphite/') }}/bin/carbon-cache.py --config=/etc/carbon/carbon.conf start
+Group=carbon
+User=carbon
+
+[Install]
+WantedBy=multi-user.target
