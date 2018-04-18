@@ -2,8 +2,13 @@
     name: ansible-role-carbon-base
     pre-run: tests/playbooks/pre.yaml
     run: tests/playbooks/run.yaml
+    post-run: tests/collect-logs.yaml
     roles:
       - zuul: openstack/ansible-role-carbon
+      - zuul: openstack/ansible-role-whisper
+    vars:
+      # Default to python2 to make testing easier
+      carbon_pip_extra_args: --install-option='--install-scripts=/usr/local/bin' --install-option='--install-lib=/usr/local/lib/python2.7/dist-packages' --install-option='--install-data=/usr/local/share/carbon'
 
 # Testing for carbon_install_method: pip
 - job:
@@ -14,6 +19,10 @@
     name: ansible-role-carbon-fedora-latest
     parent: ansible-role-carbon
     nodeset: fedora-latest
+    vars:
+      carbon_pip_executable: pip3
+      carbon_pip_extra_args: --install-option='--install-scripts=/usr/local/bin' --install-option='--install-lib=/usr/local/lib/python3.6/dist-packages' --install-option='--install-data=/usr/local/share/carbon'
+      whisper_pip_executable: pip3
 
 - job:
     name: ansible-role-carbon-ubuntu-bionic
@@ -31,11 +40,16 @@
     parent: ansible-role-carbon-base
     vars:
       carbon_install_method: git
+      whisper_install_method: git
 
 - job:
     name: ansible-role-carbon-src-fedora-latest
     parent: ansible-role-carbon-src
     nodeset: fedora-latest
+    vars:
+      carbon_pip_executable: pip3
+      carbon_pip_extra_args: --install-option='--install-scripts=/usr/local/bin' --install-option='--install-lib=/usr/local/lib/python3.6/dist-packages' --install-option='--install-data=/usr/local/share/carbon'
+      whisper_pip_executable: pip3
 
 - job:
     name: ansible-role-carbon-src-ubuntu-bionic
