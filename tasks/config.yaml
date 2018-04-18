@@ -12,10 +12,23 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 ---
-- name: Include OS-specific variables.
-  include_vars: "{{ ansible_os_family }}.yaml"
+- name: Create required directories.
+  become: yes
+  file:
+    group: "{{ carbon_user_group }}"
+    owner: "{{ carbon_user_name }}"
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /etc/carbon
+    - /var/log/carbon
 
-- include: "{{ carbon_task }}.yaml"
-  with_items: "{{ carbon_task_manager }}"
-  loop_control:
-    loop_var: carbon_task
+- name: Install carbon configuration.
+  become: yes
+  template:
+    dest: "{{ carbon_file_carbon_conf_dest }}"
+    group: "{{ carbon_file_carbon_conf_group }}"
+    mode: "{{ carbon_file_carbon_conf_mode }}"
+    owner: "{{carbon_file_carbon_conf_owner }}"
+    src: "{{ carbon_file_carbon_conf_src }}"
+  register: carbon_file_carbon_conf
