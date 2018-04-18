@@ -1,0 +1,84 @@
+# Copyright 2015 Red Hat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+---
+- name: Define carbon_file_carbon_cache_service_dest.
+  set_fact:
+    carbon_file_carbon_cache_service_dest: "{{ __carbon_file_carbon_cache_service_dest }}"
+  when: carbon_file_carbon_cache_service_dest is not defined
+
+- name: Define carbon_file_carbon_cache_service_mode.
+  set_fact:
+    carbon_file_carbon_cache_service_mode: "{{ __carbon_file_carbon_cache_service_mode }}"
+  when: carbon_file_carbon_cache_service_mode is not defined
+
+- name: Define carbon_file_carbon_cache_service_src.
+  set_fact:
+    carbon_file_carbon_cache_service_src: "{{ __carbon_file_carbon_cache_service_src }}"
+  when: carbon_file_carbon_cache_service_src is not defined
+
+- name: Define carbon_file_carbon_cache_service_config_dest.
+  set_fact:
+    carbon_file_carbon_cache_service_config_dest: "{{ __carbon_file_carbon_cache_service_config_dest  }}"
+  when: carbon_file_carbon_cache_service_config_dest is not defined
+
+- name: Define carbon_file_carbon_cache_service_config_mode.
+  set_fact:
+    carbon_file_carbon_cache_service_config_mode: "{{ __carbon_file_carbon_cache_service_config_mode  }}"
+  when: carbon_file_carbon_cache_service_config_mode is not defined
+
+- name: Define carbon_file_carbon_cache_service_config_src.
+  set_fact:
+    carbon_file_carbon_cache_service_config_src: "{{ __carbon_file_carbon_cache_service_config_src  }}"
+  when: carbon_file_carbon_cache_service_config_src is not defined
+
+- name: Install carbon-cache service script into place.
+  become: yes
+  template:
+    dest: "{{ carbon_file_carbon_cache_service_dest }}"
+    group: "{{ carbon_file_carbon_cache_service_group }}"
+    mode: "{{ carbon_file_carbon_cache_service_mode }}"
+    owner: "{{ carbon_file_carbon_cache_service_owner }}"
+    src: "{{ carbon_file_carbon_cache_service_src }}"
+  register: carbon_file_carbon_cache_service
+  when: carbon_file_carbon_cache_service_manage
+
+- name: Create carbon-cache service config directory.
+  become: yes
+  file:
+    group: "{{ carbon_file_carbon_cache_service_config_group }}"
+    owner: "{{ carbon_file_carbon_cache_service_config_owner }}"
+    path: "{{ carbon_file_carbon_cache_service_dest }}.d"
+    state: directory
+  when: carbon_file_carbon_cache_service_config_manage
+
+- name: Install carbon-cache service config into place.
+  become: yes
+  template:
+    dest: "{{ carbon_file_carbon_cache_service_config_dest  }}"
+    group: "{{ carbon_file_carbon_cache_service_config_group  }}"
+    mode: "{{ carbon_file_carbon_cache_service_config_mode  }}"
+    owner: "{{ carbon_file_carbon_cache_service_config_owner  }}"
+    src: "{{ carbon_file_carbon_cache_service_config_src  }}"
+  register: carbon_file_carbon_cache_service_config
+  when: carbon_file_carbon_cache_service_config_manage
+
+- name: Enable carbon-cache service.
+  become: yes
+  systemd:
+    daemon_reload: "{{ carbon_service_carbon_cache_daemon_reload }}"
+    enabled: "{{ carbon_service_carbon_cache_enabled }}"
+    name: "{{ carbon_service_carbon_cache_name }}"
+    state: "{{ carbon_service_carbon_cache_state }}"
+  register: carbon_service_carbon_cache
+  when: carbon_service_carbon_cache_manage

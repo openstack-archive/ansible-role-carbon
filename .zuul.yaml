@@ -2,6 +2,7 @@
     name: ansible-role-carbon-base
     pre-run: tests/playbooks/pre.yaml
     run: tests/playbooks/run.yaml
+    post-run: tests/collect-logs.yaml
     roles:
       - zuul: openstack/ansible-role-carbon
 

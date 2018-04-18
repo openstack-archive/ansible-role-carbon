@@ -1,4 +1,4 @@
-# Copyright 2015 Red Hat, Inc.
+# Copyright 2016 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,15 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 ---
-- name: Include OS-specific variables.
-  include_vars: "{{ ansible_os_family }}.yaml"
+- name: Create group account.
+  become: yes
+  group:
+    name: "{{ carbon_user_group }}"
 
-- include: "{{ carbon_task }}.yaml"
-  with_items: "{{ carbon_task_manager }}"
-  loop_control:
-    loop_var: carbon_task
+- name: Create user account.
+  become: yes
+  user:
+    createhome: yes
+    group: "{{ carbon_user_group }}"
+    home: "{{ carbon_user_home }}"
+    name: "{{ carbon_user_name }}"
