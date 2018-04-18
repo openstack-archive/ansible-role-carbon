@@ -1,0 +1,39 @@
+- job:
+    name: ansible-role-carbon-base
+    pre-run: tests/playbooks/pre.yaml
+    run: tests/playbooks/run.yaml
+    roles:
+      - zuul: openstack/ansible-role-carbon
+
+# Testing for carbon_install_method: git
+- job:
+    name: ansible-role-carbon-src
+    parent: ansible-role-carbon-base
+
+- job:
+    name: ansible-role-carbon-src-fedora-27
+    parent: ansible-role-carbon-src
+    nodeset: fedora-27
+
+- job:
+    name: ansible-role-carbon-src-ubuntu-bionic
+    parent: ansible-role-carbon-src
+    nodeset: ubuntu-bionic
+
+- job:
+    name: ansible-role-carbon-src-ubuntu-xenial
+    parent: ansible-role-carbon-src
+    nodeset: ubuntu-xenial
+
+- project:
+    check:
+      jobs:
+        - ansible-role-carbon-src-fedora-27
+        - ansible-role-carbon-src-ubuntu-bionic
+        - ansible-role-carbon-src-ubuntu-xenial
+        - tox-linters
+    gate:
+      jobs:
+        - ansible-role-carbon-src-fedora-27
+        - ansible-role-carbon-src-ubuntu-xenial
+        - tox-linters
