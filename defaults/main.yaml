@@ -12,7 +12,32 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 ---
+# tasks/main.yaml
+carbon_task_manager:
+  - pre
+  - install
+  - config
+  - service
+
+# tasks/pre.yaml
+carbon_user_name: carbon
+carbon_user_group: carbon
+carbon_user_home: /var/lib/carbon
+
 # tasks/config.yaml
+carbon_file_carbon_conf_dest: /etc/carbon/carbon.conf
+carbon_file_carbon_conf_group: "{{ carbon_user_group }}"
+carbon_file_carbon_conf_mode: 0644
+carbon_file_carbon_conf_owner: "{{ carbon_user_name }}"
+carbon_file_carbon_conf_src: etc/carbon/carbon.conf
+
+carbon_file_storage_schemas_conf_dest: /etc/carbon/storage-schemas.conf
+carbon_file_storage_schemas_conf_group: "{{ carbon_user_group }}"
+carbon_file_storage_schemas_conf_mode: 0644
+carbon_file_storage_schemas_conf_owner: "{{ carbon_user_name }}"
+carbon_file_storage_schemas_conf_src: etc/carbon/storage-schemas.conf
+
+# tasks/install.yaml
 carbon_git_dest: "{{ ansible_user_dir }}/src/github.com/graphite-project/carbon"
 carbon_git_uri: https://github.com/graphite-project/carbon
 carbon_git_version: master
@@ -21,8 +46,23 @@ carbon_git_version: master
 carbon_install_method: git
 
 carbon_pip_name: carbon
+carbon_pip_extra_args: --install-option='--install-scripts=/usr/local/bin' --install-option='--install-lib=/usr/local/lib/python2.7/dist-packages' --install-option='--install-data=/usr/local/share/carbon'
 # carbon_pip_executable:
-# carbon_pip_extra_args:
 # carbon_pip_version:
 # carbon_pip_virtualenv_python:
 # carbon_pip_virtualenv:
+
+# tasks/service.yaml
+carbon_file_carbon_cache_service_manage: true
+carbon_file_carbon_cache_service_group: root
+carbon_file_carbon_cache_service_owner: root
+
+carbon_file_carbon_cache_service_config_manage: true
+carbon_file_carbon_cache_service_config_group: root
+carbon_file_carbon_cache_service_config_owner: root
+
+carbon_service_carbon_cache_daemon_reload: true
+carbon_service_carbon_cache_enabled: yes
+carbon_service_carbon_cache_manage: true
+carbon_service_carbon_cache_name: carbon-cache
+carbon_service_carbon_cache_state: started

@@ -2,8 +2,10 @@
     name: ansible-role-carbon-base
     pre-run: tests/playbooks/pre.yaml
     run: tests/playbooks/run.yaml
+    post-run: tests/collect-logs.yaml
     roles:
       - zuul: openstack/ansible-role-carbon
+      - zuul: openstack/ansible-role-whisper
 
 # Testing for carbon_install_method: pip
 - job:
@@ -31,6 +33,7 @@
     parent: ansible-role-carbon-base
     vars:
       carbon_install_method: git
+      whisper_install_method: git
 
 - job:
     name: ansible-role-carbon-src-fedora-27
