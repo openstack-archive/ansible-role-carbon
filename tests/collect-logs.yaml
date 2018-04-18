@@ -1,0 +1,32 @@
+- hosts: all
+  tasks:
+    - name: Ensure journald logs directory exists
+      file:
+        path: "~/logs/var/log/journal"
+        state: directory
+
+    - name: Collect journald logs
+      shell: "sudo journalctl -u {{ item }}.service | tee ~/logs/var/log/journal/{{ item }}.service.log"
+      args:
+        creates: "~/logs/var/log/journal/{{ item }}.service.log"
+      with_items:
+        - carbon-cache
+
+    - name: Collect journalctl log files
+      synchronize:
+        dest: "{{ zuul.executor.log_root }}"
+        mode: pull
+        src: ~/logs
+        verify_host: true
+
+    - name: Collect statsd log files
+      synchronize:
+        dest: "{{ zuul.executor.log_root }}/logs"
+        mode: pull
+        rsync_opts:
+          - "--relative"
+        src: "{{ item }}"
+        verify_host: true
+      with_items:
+        - /etc/carbon
+        - /var/log/carbon
