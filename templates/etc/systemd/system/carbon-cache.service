@@ -1,0 +1,14 @@
+[Unit]
+Description=Graphite Carbon Cache
+After=syslog.target network.target
+
+[Service]
+Type=forking
+ExecStart={{ carbon_pip_virtualenv | default('/usr/local') }}/bin/carbon-cache.py --config=/etc/carbon/carbon.conf start
+Group=carbon
+PIDFile=/var/run/carbon/carbon-cache-a.pid
+RuntimeDirectory=carbon
+User=carbon
+
+[Install]
+WantedBy=multi-user.target
