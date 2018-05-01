@@ -20,11 +20,15 @@ galaxy_info:
     using a storage backend.
   company: Red Hat, Inc.
   license: Apache
-  min_ansible_version: 2.0
+  min_ansible_version: 2.3
   platforms:
-  - name: EL
+  - name: Fedora
     versions:
-    - 7
+    - 27
+  - name: Ubuntu
+    versions:
+    - 16.04
+    - 18.04
   categories:
-  - cloud
+  - system
 dependencies: []
