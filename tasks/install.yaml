@@ -32,4 +32,15 @@
     - carbon_pip_virtualenv_python is not defined
     - carbon_pip_executable is not defined
 
+- name: Define carbon_pip_extra_args if needed.
+  set_fact:
+    carbon_pip_extra_args: >-
+      --install-option='--install-scripts=/usr/local/bin'
+      --install-option='--install-lib={{ python_dist_packages_path[ansible_distribution][ansible_distribution_version][carbon_pip_executable] }}'
+      --install-option='--install-data=/usr/local/share/carbon'
+  when:
+    - carbon_install_method == 'git' or carbon_install_method == 'pip'
+    - carbon_pip_virtualenv_python is not defined
+    - carbon_pip_extra_args is not defined
+
 - include: "install/{{ carbon_install_method }}.yaml"

@@ -46,7 +46,7 @@ carbon_git_version: master
 carbon_install_method: git
 
 carbon_pip_name: carbon
-carbon_pip_extra_args: --install-option='--install-scripts=/usr/local/bin' --install-option='--install-lib=/usr/local/lib/python3.6/dist-packages' --install-option='--install-data=/usr/local/share/carbon'
+# carbon_pip_extra_args:
 # carbon_pip_executable:
 # carbon_pip_version:
 # carbon_pip_virtualenv_python:
