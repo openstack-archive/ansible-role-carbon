@@ -1,0 +1,8 @@
+Code-Review+2: Paul Belanger <pabelanger@redhat.com>
+Workflow+1: Paul Belanger <pabelanger@redhat.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 26 Jul 2018 03:01:33 +0000
+Reviewed-on: https://review.openstack.org/585917
+Project: openstack/ansible-role-carbon
+Branch: refs/heads/master
