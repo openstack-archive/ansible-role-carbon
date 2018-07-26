@@ -11,9 +11,9 @@
     parent: ansible-role-carbon-base
 
 - job:
-    name: ansible-role-carbon-fedora-27
+    name: ansible-role-carbon-fedora-latest
     parent: ansible-role-carbon
-    nodeset: fedora-27
+    nodeset: fedora-latest
 
 - job:
     name: ansible-role-carbon-ubuntu-bionic
@@ -33,9 +33,9 @@
       carbon_install_method: git
 
 - job:
-    name: ansible-role-carbon-src-fedora-27
+    name: ansible-role-carbon-src-fedora-latest
     parent: ansible-role-carbon-src
-    nodeset: fedora-27
+    nodeset: fedora-latest
 
 - job:
     name: ansible-role-carbon-src-ubuntu-bionic
@@ -50,19 +50,19 @@
 - project:
     check:
       jobs:
-        - ansible-role-carbon-fedora-27
+        - ansible-role-carbon-fedora-latest
         - ansible-role-carbon-ubuntu-bionic
         - ansible-role-carbon-ubuntu-xenial
-        - ansible-role-carbon-src-fedora-27
+        - ansible-role-carbon-src-fedora-latest
         - ansible-role-carbon-src-ubuntu-bionic
         - ansible-role-carbon-src-ubuntu-xenial
         - tox-linters
     gate:
       jobs:
-        - ansible-role-carbon-fedora-27
+        - ansible-role-carbon-fedora-latest
         - ansible-role-carbon-ubuntu-bionic
         - ansible-role-carbon-ubuntu-xenial
-        - ansible-role-carbon-src-fedora-27
+        - ansible-role-carbon-src-fedora-latest
         - ansible-role-carbon-src-ubuntu-bionic
         - ansible-role-carbon-src-ubuntu-xenial
         - tox-linters
