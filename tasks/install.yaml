@@ -32,4 +32,4 @@
     - carbon_pip_virtualenv_python is not defined
     - carbon_pip_executable is not defined
 
-- include: "install/{{ carbon_install_method }}.yaml"
+- include_tasks: "install/{{ carbon_install_method }}.yaml"
